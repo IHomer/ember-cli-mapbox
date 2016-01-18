@@ -7,10 +7,10 @@ export default Ember.Component.extend({
   symbol: '',
   color: '#444444',
   marker: null,
-  isLoaded: Ember.computed('map', function() {
+  isLoaded: Ember.computed('map', 'marker', function() {
     var map = this.get('map');
-    if (typeof(map) != 'undefined') {
-      let marker = this.get('marker');
+    var marker = this.get('marker');
+    if (typeof(map) != 'undefined' && marker != null) {
       marker.addTo(map);
       return true;
     } else {
@@ -29,6 +29,14 @@ export default Ember.Component.extend({
 
     marker.on('click', () => {
       this.sendAction('onclick');
+    });
+
+    marker.on('popupopen', () => {
+      this.sendAction('popupopen');
+    });
+
+    marker.on('popupclose', () => {
+      this.sendAction('popupclose');
     });
 
     this.set('marker', marker);
