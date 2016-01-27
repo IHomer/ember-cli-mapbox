@@ -2,12 +2,12 @@ import Ember from 'ember';
 import layout from '../templates/components/mapbox-map';
 
 export default Ember.Component.extend({
-  classNameBindings: ['reCenter'],
+  classNameBindings: ['recenter', 'resize'],
   layout: layout,
   divId: 'map',
   mapId: null,
   
-  reCenter: Ember.computed('center', function() {
+  recenter: Ember.computed('center', function() {
     var map = this.get('map');
     var center = this.get('center');
     if (typeof(map) != 'undefined' && center != null) {
@@ -17,7 +17,15 @@ export default Ember.Component.extend({
       return false;
     }
   }),
-  
+  resize: Ember.computed('resize', function() {
+    var map = this.get('map');
+    if (typeof(map) != 'undefined') {
+      map.invalidateSize();
+      return true;
+    } else {
+      return false;
+    }
+  }),
   setup: Ember.on('didInsertElement', function() {
     Ember.run.scheduleOnce('afterRender', this, function () {
       let map = L.mapbox.map(this.get('divId'), this.get('mapId'));
