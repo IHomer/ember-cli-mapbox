@@ -32,6 +32,7 @@ corresponding mapId form mapbox.
 If `divId` is not specified it defaults to 'map'.
 
 You can specify the zoom level, center of the map, and trigger an `onclick` event as attributes.
+The center attribute is reactive, changing the attribute will recenter the map.
 The `onclick` event will return an instance of the event containing the lat,lng, among other properties. 
 
 ```hbs
@@ -41,6 +42,8 @@ The `onclick` event will return an instance of the event containing the lat,lng,
   onclick="actionName"
   zoom=13}}
 ```
+
+You can also add a resize attribute, when this attribute changes the map invalidateSize function is called. This checks if the map container size changed and updates the map if so. Usefull if you want to the map size using jQuery resizable.
 
 ### mapbox-marker
 
