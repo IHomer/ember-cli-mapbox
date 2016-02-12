@@ -7,6 +7,7 @@ export default Ember.Component.extend({
   symbol: '',
   color: '#444444',
   marker: null,
+  divIcon: null,
   isLoaded: Ember.computed('map', 'marker', function() {
     var map = this.get('map');
     var marker = this.get('marker');
@@ -17,24 +18,36 @@ export default Ember.Component.extend({
       return false;
     }
   }),
-  colorChange: Ember.observer('color', 'size', 'symbol', function() {
+  colorChange: Ember.observer('color', 'size', 'symbol', 'divIcon', function() {
     var map = this.get('map');
     var marker = this.get('marker');
     if (typeof(map) != 'undefined' && marker != null) {
-      marker.setIcon(L.mapbox.marker.icon({
-        'marker-color': this.get('color'),
-        'marker-size': this.get('size'),
-        'marker-symbol': this.get('symbol')
-      }));
+      var divIcon = this.get('divIcon');
+      if (divIcon != null) {
+        marker.setIcon(L.divIcon(divIcon));
+      } else {
+        marker.setIcon(L.mapbox.marker.icon({
+          'marker-color': this.get('color'),
+          'marker-size': this.get('size'),
+          'marker-symbol': this.get('symbol')
+        }));
+      }
     }
   }),
   setup: Ember.on('didInsertElement', function() {
-    let marker = L.marker(this.get('coordinates'), {
-      icon: L.mapbox.marker.icon({
+    var divIcon = this.get('divIcon');
+    var icon = null;
+    if (divIcon != null) {
+      icon = L.divIcon(divIcon);
+    } else {
+      icon = L.mapbox.marker.icon({
         'marker-color': this.get('color'),
         'marker-size': this.get('size'),
         'marker-symbol': this.get('symbol')
-      })
+      });
+    }
+    let marker = L.marker(this.get('coordinates'), {
+      icon: icon
     });
     marker.bindPopup(this.get('popup-title'));
 
