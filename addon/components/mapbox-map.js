@@ -33,6 +33,8 @@ export default Ember.Component.extend({
       if (this.get('center') && this.get('zoom')) {
         map.setView(this.get('center'), this.get('zoom'));
       }
+      var markers = L.mapbox.featureLayer().addTo(map);
+      this.set('markers', markers);
       this.set('map', map);
     });
   }),
