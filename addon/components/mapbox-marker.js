@@ -8,14 +8,23 @@ export default Ember.Component.extend({
   color: '#444444',
   marker: null,
   divIcon: null,
-  isLoaded: Ember.computed('map', 'marker', function() {
+  fit: true,
+  isLoaded: Ember.observer('map', 'markers', 'marker', function() {
     var map = this.get('map');
+    var markers = this.get('markers');
     var marker = this.get('marker');
-    if (typeof(map) != 'undefined' && marker != null) {
-      marker.addTo(map);
-      return true;
-    } else {
-      return false;
+    var fit = this.get('fit');
+    if (typeof(markers) != 'undefined' && marker != null) {
+      marker.addTo(markers);
+      if (fit) {
+        this.set('fit', false);
+        Ember.run.scheduleOnce('afterRender', this, function () {
+          var map = this.get('map');
+          var markers = this.get('markers');
+          console.log('fitBounds');
+          map.fitBounds(markers.getBounds());
+        });
+      }
     }
   }),
   colorChange: Ember.observer('color', 'size', 'symbol', 'divIcon', function() {
