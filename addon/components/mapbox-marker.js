@@ -9,6 +9,10 @@ export default Ember.Component.extend({
   marker: null,
   divIcon: null,
   fit: true,
+  fitBounds: function(map, markers) {
+    console.log('fitBounds');
+    map.fitBounds(markers.getBounds());
+  },
   isLoaded: Ember.observer('map', 'markers', 'marker', function() {
     var map = this.get('map');
     var markers = this.get('markers');
@@ -18,12 +22,7 @@ export default Ember.Component.extend({
       marker.addTo(markers);
       if (fit) {
         this.set('fit', false);
-        Ember.run.scheduleOnce('afterRender', this, function () {
-          var map = this.get('map');
-          var markers = this.get('markers');
-          console.log('fitBounds');
-          map.fitBounds(markers.getBounds());
-        });
+        Ember.run.scheduleOnce('afterRender', null, this.fitBounds, map, markers);
       }
     }
   }),
