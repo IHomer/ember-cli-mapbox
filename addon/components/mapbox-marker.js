@@ -57,7 +57,7 @@ export default Ember.Component.extend({
     let marker = L.marker(this.get('coordinates'), {
       icon: icon
     });
-    marker.bindPopup(this.get('popup-title'));
+    marker.bindPopup(this.get('popup-title'), {offset: [78,5]});
 
     marker.on('click', () => {
       this.sendAction('onclick');
