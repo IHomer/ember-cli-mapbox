@@ -40,6 +40,7 @@ export default Ember.Component.extend({
           'marker-symbol': this.get('symbol')
         }));
       }
+      marker.bindPopup(this.get('popup-title'), {offset: [78,5]});
     }
   }),
   setup: Ember.on('didInsertElement', function() {
