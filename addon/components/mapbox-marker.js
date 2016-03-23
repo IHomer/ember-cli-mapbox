@@ -40,7 +40,9 @@ export default Ember.Component.extend({
           'marker-symbol': this.get('symbol')
         }));
       }
-      marker.bindPopup(this.get('popup-title'), {offset: [78,5]});
+      if (this.get('popup-title')) {
+        marker.bindPopup(this.get('popup-title'), {offset: [78,5]});
+      }
     }
   }),
   setup: Ember.on('didInsertElement', function() {
@@ -58,8 +60,11 @@ export default Ember.Component.extend({
     let marker = L.marker(this.get('coordinates'), {
       icon: icon
     });
-    marker.bindPopup(this.get('popup-title'), {offset: [78,5]});
-
+    
+    if (this.get('popup-title')) {
+      marker.bindPopup(this.get('popup-title'), {offset: [78,5]});
+    }
+    
     marker.on('click', () => {
       this.sendAction('onclick');
     });
